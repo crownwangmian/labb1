@@ -6,6 +6,7 @@ import java.util.Scanner;
  * @version 4.1
  * @Versionförändringar 1.Koden är logiskt korrekt och fungerar som förväntat.
  * 2.Färg och format har lagts till.
+ * 3.Added validation for numeric input
  * @Nästa versionsförbättringar:
  * Lägga till try-catch-block.
  * Använda Collection för att göra hanteringen mer bekväm.
@@ -80,7 +81,7 @@ class Labb1Company {
                     }
                     owner[index] = ownerPercentage; // tilldeal ownership
                     totalOwnerPercentage += ownerPercentage; // räknar total ownership
-                    if (totalOwnerPercentage > 100) {
+                    if (totalOwnerPercentage >= 100) {
                         System.out.println("ownership är över 100, du måste göra igen");
                         continue flag;
                     }
@@ -159,7 +160,7 @@ class Labb1Company {
             // bestäm om den faktiska parametern är ägare eller anställd, om ägare,
             // man behöver see till de aktier som vill flyttas är mindra de aktier som redan finns
             if (!giveOwnership && correctOwnership >= array[index - 1]) {
-                System.out.println("du kan endast ta " + (correctOwnership - array[index - 1] - 1) + " procentenheter från ägare");
+                System.out.println("du kan endast ta " + (array[index - 1] - 1) + " procentenheter från ägare");
                 continue;
             }
 
@@ -254,6 +255,10 @@ class Labb1Company {
             System.out.println("Du kan inte ta bort den enda ägaren i företaget");
             return array;
         }
+        if (elementParam.equalsIgnoreCase("anställd") && array.length == 0) {
+            System.out.println("Det finns inga anställda att ta bort");
+            return array;
+        }
         System.out.println("Vilken " + elementParam + " vill du ta bort?");
         int inputNumber;
         do {
@@ -281,16 +286,15 @@ class Labb1Company {
 
     // ändra ägare
     public static int[] change(int[] array, String elementParam) {
-        int inputNumber;
-        boolean giveAway;
-        if (array.length <= 1) {
-            System.out.println("endas en ägare, du måste lägg till mer ägare");
+        if (elementParam.equalsIgnoreCase("anställd") && array.length == 0) {
+            System.out.println("Det finns inga anställda att ändra");
             return array;
         }
+        System.out.println("Vilken " + elementParam + " vill du ändra på");
+        printAll(array, elementParam);
+        int inputNumber;
+        boolean giveAway;
         while (true) {
-            System.out.println("Vilken" + elementParam + "vill du ändra på");
-            printAll(array, elementParam);
-
             System.out.println("Ange siffran på den du vill ändra på >");
             inputNumber = Integer.parseInt(sc.nextLine()) - 1;
             if (inputNumber < 0 || inputNumber >= array.length) {
@@ -299,7 +303,6 @@ class Labb1Company {
             }
             break;
         }
-
         if (!elementParam.equalsIgnoreCase("ägare")) {
             int salary;
             while (true) {
@@ -318,10 +321,15 @@ class Labb1Company {
         while (true) {
             System.out.println("Ange ägarens nys ägarandel > ");
             ownership = Integer.parseInt(sc.nextLine());
-            if (ownership < 0 || ownership > 100) {
-                System.out.println("Felaktig ägarandel. Det måste vara mer än 0% och imndre än 100%");
+            if (ownership <= 0 || ownership > 100) {
+                System.out.println("Felaktig ägarandel. Det måste vara mer än 0% och mindre än 100%");
                 continue;
             }
+            if (ownership == array[inputNumber]) {
+                System.out.println("du förädrar inget");
+                continue;
+            }
+
             break;
         }
         if (ownership > array[inputNumber]) {
