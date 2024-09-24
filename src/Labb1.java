@@ -7,9 +7,8 @@ import java.util.Scanner;
  * @Versionförändringar 1.Koden är logiskt korrekt och fungerar som förväntat.
  * 2.Färg och format har lagts till.
  * @Nästa versionsförbättringar:
- * Lägga till funktioner, såsom automatisk beräkning av vinst.
  * Lägga till try-catch-block.
- * Använda samlingar för att göra hanteringen mer bekväm.
+ * Använda Collection för att göra hanteringen mer bekväm.
  * Använda objektorienterad programmering.
  * Förbättra metodanvändningen för att öka programmets effektivitet.
  * @since 2024-09-21
@@ -40,15 +39,21 @@ class Labb1Company {
             }
             break;
         }
+        String stringOfOwner;
         int numberOfOwner;
         // avgör hur många ägare som ska finnas
-        int[] owner = null;
+        int[] owner;
 
         flag:
         while (true) {
             while (true) {
                 System.out.println("Antal ägare?");
-                numberOfOwner = Integer.parseInt(sc.nextLine());
+                stringOfOwner = sc.nextLine();
+                if (!isValid(stringOfOwner)) {
+                    System.out.println("bara numer");
+                    continue;
+                }
+                numberOfOwner = Integer.parseInt(stringOfOwner);
                 if (!(numberOfOwner > 0)) {
                     System.out.println(ANSI_RED + "Det måste finnas minst en ägare" + ANSI_RESET);
                     continue;
@@ -390,6 +395,11 @@ class Labb1Company {
         System.out.println("*   ^   *");
         System.out.println(" * '-' * ");
         System.out.println("  *****  ");
+    }
+
+    // kollar om input är ett nummer
+    public static boolean isValid(String input) {
+        return input.matches("\\d+");
     }
 }
 
