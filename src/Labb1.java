@@ -205,8 +205,9 @@ class Labb1Company {
         while (true) {
             System.out.println("Ange ägarens ägarandel");
             ownership = Integer.parseInt(sc.nextLine());
-            if (ownership < 0 || ownership > 100) {
-                System.out.println("Felaktig ägarandel. Det måste vara mer än 0% och imndre än 100%");
+            int count_ownership =  Arrays.stream(array).sum() - array.length;
+            if (ownership <= 0 || ownership > count_ownership) {
+                System.out.println("Felaktig ägarandel. Det måste vara mer än 0% och mindre än " + count_ownership + "%.");
                 continue;
             }
             correctOwnership(array, ownership, false);
@@ -321,15 +322,15 @@ class Labb1Company {
         while (true) {
             System.out.println("Ange ägarens nys ägarandel > ");
             ownership = Integer.parseInt(sc.nextLine());
-            if (ownership <= 0 || ownership > 100) {
-                System.out.println("Felaktig ägarandel. Det måste vara mer än 0% och mindre än 100%");
+            int count_ownership = Arrays.stream(array).sum() - array.length;
+            if (ownership <= 0 || ownership > count_ownership) {
+                System.out.println("Felaktig ägarandel. Det måste vara mer än 0% och mindre än " + count_ownership + "%.");
                 continue;
             }
             if (ownership == array[inputNumber]) {
                 System.out.println("du förädrar inget");
                 continue;
             }
-
             break;
         }
         if (ownership > array[inputNumber]) {
